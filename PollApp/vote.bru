@@ -1,0 +1,23 @@
+meta {
+  name: vote
+  type: http
+  seq: 7
+}
+
+put {
+  url: http://127.0.0.1:8080/vote
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "voter" : {
+        "name" : "ola",
+        "email" : "ola@gmail.com"
+      },
+      "question": "ass or tits?",
+      "answer": "ass"
+    }
+  
+}

@@ -1,0 +1,277 @@
+{
+  "name": "PollApp",
+  "version": "1",
+  "items": [
+    {
+      "type": "http",
+      "name": "createPoll",
+      "seq": 5,
+      "request": {
+        "url": "http://127.0.0.1:8080/createPoll",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"creator\" : {\n    \"name\" : \"ola\",\n    \"email\" : \"ola@gmail.com\"\n  },\n  \"question\": \"ass or tits?\",\n  \"validUntil\": \"2024-09-06T13:47:46.075846500Z\",\n  \"options\": [\n    {\n      \"caption\": \"ass\",\n      \"presentationOrder\": 0,\n      \"votes\": []\n    },\n    {\n      \"caption\": \"tits\",\n      \"presentationOrder\": 1,\n      \"votes\": []\n    }\n  ]\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "getPolls",
+      "seq": 6,
+      "request": {
+        "url": "http://127.0.0.1:8080/polls",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "getUsers",
+      "seq": 2,
+      "request": {
+        "url": "http://127.0.0.1:8080/users",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"name\": \"nothing\",\n  \"email\": \"nothing@gmail.com\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "vote",
+      "seq": 7,
+      "request": {
+        "url": "http://127.0.0.1:8080/vote",
+        "method": "PUT",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"voter\" : {\n      \"name\" : \"ola\",\n      \"email\" : \"ola@gmail.com\"\n    },\n    \"question\": \"ass or tits?\",\n    \"answer\": \"ass\"\n  }\n",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "deletePoll",
+      "seq": 10,
+      "request": {
+        "url": "http://127.0.0.1:8080/delete",
+        "method": "DELETE",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "text",
+          "text": "ass or tits?",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "createUser1",
+      "seq": 1,
+      "request": {
+        "url": "http://127.0.0.1:8080/createUser",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"name\": \"ola\",\n  \"email\": \"ola@gmail.com\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "createUser2",
+      "seq": 3,
+      "request": {
+        "url": "http://127.0.0.1:8080/createUser",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"name\": \"ola\",\n  \"email\": \"ola@gmail.com\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "getUsers2",
+      "seq": 4,
+      "request": {
+        "url": "http://127.0.0.1:8080/users",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n  \"name\": \"nothing\",\n  \"email\": \"nothing@gmail.com\"\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "changeVote",
+      "seq": 8,
+      "request": {
+        "url": "http://127.0.0.1:8080/vote",
+        "method": "PUT",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"voter\" : {\n      \"name\" : \"lisa\",\n      \"email\" : \"lisa@gmail.com\"\n    },\n    \"question\": \"sol eller måne?\",\n    \"answer\": \"sol\"\n  }\n",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "getPolls2",
+      "seq": 9,
+      "request": {
+        "url": "http://127.0.0.1:8080/polls",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "getPolls3",
+      "seq": 12,
+      "request": {
+        "url": "http://127.0.0.1:8080/polls",
+        "method": "GET",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    }
+  ],
+  "environments": [],
+  "brunoConfig": {
+    "version": "1",
+    "name": "PollApp",
+    "type": "collection",
+    "ignore": [
+      "node_modules",
+      ".git"
+    ]
+  }
+}

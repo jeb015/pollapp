@@ -1,0 +1,107 @@
+package com.example.demo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.Array;
+import java.net.URI;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+@RestController
+public class PollController {
+
+    public final PollManager manager;
+
+    public final DomainManager domainManager;
+
+    public PollController(@Autowired PollManager manager, DomainManager domainManager) {
+        this.manager = manager;
+        this.domainManager = domainManager;
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<User> users(@PathVariable String username) {
+        for (User usr : domainManager.getUsers()) {
+            if (usr.getName().equals(username)) {
+                return ResponseEntity.ok(usr);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/createUser")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        for (User usr : domainManager.getUsers()) {
+            if (usr.getEmail().equals(user.getEmail())) {
+                return ResponseEntity.ok(user);
+            }
+        }
+        User newUser = new User(user.name, user.email);
+        domainManager.getUsers().add(newUser);
+        return ResponseEntity.created(URI.create("/" + newUser.name)).body(newUser);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<ArrayList<User>> getUsers() {
+        return ResponseEntity.ok(domainManager.getUsers());
+    }
+
+    @GetMapping("/polls")
+    public ResponseEntity<ArrayList<Poll>> getPolls() {
+        return ResponseEntity.ok(domainManager.getPolls());
+    }
+
+
+
+    @PostMapping("/createPoll")
+    public ResponseEntity<Poll> addPoll(@RequestBody Poll poll) {
+        Poll newPoll = new Poll(poll.creator, poll.question, poll.validUntil, poll.options);
+        domainManager.getPolls().add(newPoll);
+        manager.getMap().put(poll.getCreator(), newPoll);
+        return ResponseEntity.created(URI.create("/" + newPoll.getCreator().name)).body(newPoll);
+    }
+
+    @PutMapping("/vote")
+    public ResponseEntity<Poll> updatePoll(@RequestBody Vote vote) {
+        Vote newVote = new Vote(vote.voter, vote.question, vote.answer);
+        for (Poll p : manager.getMap().values()) {
+            if (p.getQuestion().equals(newVote.getQuestion())) {
+                for (VoteOption ops : p.getOptions()) {
+                    if (ops.getCaption().equals(newVote.getAnswer())) {
+                        removePrevVote(p, newVote.getVoter());
+                        ops.getVotes().add(newVote);
+                        return ResponseEntity.ok(p);
+                    }
+                }
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/delete")
+    public String deletePoll(@RequestBody String question) {
+        System.out.println(question);
+        for (Poll p : domainManager.getPolls()) {
+            if (p.getQuestion().equals(question)) {
+                domainManager.getPolls().remove(p);
+                return "Poll Deleted";
+            }
+        }
+        return "Poll not found";
+    }
+
+    public void removePrevVote (Poll poll, User user) {
+        for (VoteOption ops : poll.getOptions()) {
+            for (Vote vote : ops.getVotes()) {
+                if (vote.getVoter().getName().equals(user.getName())) {
+                    ops.getVotes().remove(vote);
+                    break;
+                }
+            }
+        }
+    }
+}
