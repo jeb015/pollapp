@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @RestController
+@CrossOrigin
 public class PollController {
 
     public final PollManager manager;
@@ -21,6 +23,11 @@ public class PollController {
     public PollController(@Autowired PollManager manager, DomainManager domainManager) {
         this.manager = manager;
         this.domainManager = domainManager;
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Hello World");
     }
 
     @GetMapping("/{username}")
@@ -34,13 +41,16 @@ public class PollController {
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        for (User usr : domainManager.getUsers()) {
-            if (usr.getEmail().equals(user.getEmail())) {
-                return ResponseEntity.ok(user);
+    public ResponseEntity<User> addUser(@RequestBody User input){
+        for (User user : domainManager.getUsers()) {
+            if (user.getEmail().equals(input.getEmail())) {
+                if (user.getName().equals(input.getName()))
+                    return ResponseEntity.ok(input);
+                else
+                    return ResponseEntity.badRequest().build();
             }
         }
-        User newUser = new User(user.name, user.email);
+        User newUser = new User(input.name, input.email);
         domainManager.getUsers().add(newUser);
         return ResponseEntity.created(URI.create("/" + newUser.name)).body(newUser);
     }
@@ -59,7 +69,7 @@ public class PollController {
 
     @PostMapping("/createPoll")
     public ResponseEntity<Poll> addPoll(@RequestBody Poll poll) {
-        Poll newPoll = new Poll(poll.creator, poll.question, poll.validUntil, poll.options);
+        Poll newPoll = new Poll(poll.creator, poll.question, poll.options);
         domainManager.getPolls().add(newPoll);
         manager.getMap().put(poll.getCreator(), newPoll);
         return ResponseEntity.created(URI.create("/" + newPoll.getCreator().name)).body(newPoll);

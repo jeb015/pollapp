@@ -6,13 +6,10 @@ public class VoteOption {
 
     public String caption;
 
-    public int presentationOrder;
-
     public ArrayList<Vote> votes;
 
-    public VoteOption(String caption, int presentationOrder) {
+    public VoteOption(String caption) {
         this.caption = caption;
-        this.presentationOrder = presentationOrder;
         this.votes = new ArrayList<>();
     }
 
@@ -25,14 +22,6 @@ public class VoteOption {
 
     public void setCaption(String caption) {
         this.caption = caption;
-    }
-
-    public int getPresentationOrder() {
-        return presentationOrder;
-    }
-
-    public void setPresentationOrder(int presentationOrder) {
-        this.presentationOrder = presentationOrder;
     }
 
     public ArrayList<Vote> getVotes() {

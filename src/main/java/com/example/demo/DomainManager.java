@@ -13,6 +13,7 @@ public class DomainManager {
     private final ArrayList<VoteOption> voteOptions = new ArrayList<>();
 
     public DomainManager() {
+        users.add(new User("ola", "ola@gmail.com"));
     }
 
     public ArrayList<User> getUsers() {
