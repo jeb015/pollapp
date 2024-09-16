@@ -14,6 +14,12 @@ public class DomainManager {
 
     public DomainManager() {
         users.add(new User("ola", "ola@gmail.com"));
+        ArrayList<VoteOption> voteOptions = new ArrayList<>();
+        VoteOption test = new VoteOption("sol");
+        test.getVotes().add(new Vote(new User("ola", "ola@gmail.com"), "sol eller måne?", "sol"));
+        voteOptions.add(test);
+        voteOptions.add(new VoteOption("måne"));
+        polls.add(new Poll(users.getFirst(), "sol eller måne?", voteOptions));
     }
 
     public ArrayList<User> getUsers() {

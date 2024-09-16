@@ -3,10 +3,10 @@
   let newName;
   let newEmail;
   let newQuestion;
-  let newOption1;
-  let newOption2;
+  let options = [""];
   let creatingPoll = false;
   let voting = true;
+
 
   function logOut() {
     currentLogin = null;
@@ -20,10 +20,40 @@
   function voteOnPolls () {
     voting = true;
     creatingPoll = false;
+    update();
+  }
+
+  function addOption () {
+    options[options.length] = ""
+  }
+
+  function placeVote(question, answer) {
+    fetch("http://localhost:8080/vote", {
+      method: "PUT",
+      body: JSON.stringify({
+        voter : {
+          name : newName,
+          email : newEmail
+        },
+        question: question,
+        answer: answer
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((response) => {
+      if (response.status === 201) {
+        alert(`User ${newName} successfully created a poll!`);
+        voteOnPolls()
+      }
+    }).catch((error) => {
+      alert(error.message);
+    })
+    update()
   }
 
   function createNewPoll() {
-    fetch("http://localhost:8080/createUser", {
+    fetch("http://localhost:8080/createPoll", {
       method: "POST",
       body: JSON.stringify({
         creator: {
@@ -31,27 +61,15 @@
           email: newEmail
         },
         question: newQuestion,
-        options: [
-          {
-            "caption": "sol",
-            "presentationOrder": 0,
-            "votes": []
-          },
-          {
-            "caption": "måne",
-            "presentationOrder": 1,
-            "votes": []
-          }
-        ]
+        options: options
       }),
       headers: {
         "Content-Type": "application/json"
       }
     }).then((response) => {
       if (response.status === 201) {
-        alert(`User ${newName} successfully created!`);
-        newName = "";
-        newEmail = "";
+        alert(`User ${newName} successfully created a poll!`);
+        voteOnPolls()
       }
     }).catch((error) => {
       alert(error.message);
@@ -71,8 +89,7 @@
       }
     }).then((response) => {
       if (response.status === 201) {
-        newName = "";
-        newEmail = "";
+        alert(`User ${newName} successfully created!`);
       }
       if (response.status === 400) {
         newName = null;
@@ -89,7 +106,7 @@
 let result;
 
   function update() {
-    result = fetch("http://localhost:8080/users").then((response) => response.json())
+    result = fetch("http://localhost:8080/polls").then((response) => response.json())
   }
 
 </script>
@@ -99,42 +116,63 @@ let result;
     {#if currentLogin != null}
       <div>
         <button on:click={logOut}>Log Out</button>
+        {#if voting === true}
         <button on:click={createPoll}>Create Poll</button>
+          {:else if creatingPoll === true}
         <button on:click={voteOnPolls}>Vote On Polls</button>
-      </div>
+          {/if}
+          </div>
       {#if creatingPoll === true}
       <div class="create-poll">
         <h2>Create new Poll</h2>
         <label for="create-name">Question:</label>
-        <!-- The bind: syntax is used to establish two-way databinding with a variable -->
         <input  id="create-name" type="text" bind:value={newQuestion}>
-        <div>
-          <label for="create-email">  Option 1:</label>
-          <input  id="create-email" type="text" bind:value={newOption1}>
-        </div>
-        <div>
-          <label for="create-email">  Option 2:</label>
-          <input  id="create-email" type="text" bind:value={newOption2}>
-        </div>
 
-        <!-- The on:click registers an event handler, i.e. a function to be called (Command pattern) -->
+          {#each options as option, i}
+            <div>
+            <label for="create-option">  Option {i + 1}:</label>
+            <input  id="create-option{i}" type="text" bind:value={options[i]}>
+            </div>
+          {/each}
+        <button on:click={addOption}> Add Option</button>
         <button on:click={createNewPoll} >Create</button>
       </div>
       {/if}
       {#if voting === true}
-        <p>Nothing yet</p>
+        {#await result}
+          it's loading..
+          {:then polls}
+          {#each polls as poll}
+            <div>
+              <p>Creator: {poll.creator.name}</p>
+              <h2>{poll.question}</h2>
+              {#each poll.options as option}
+              <p>
+                {option.caption}
+                {#if option.votes.length >= 1}
+                  {#each option.votes as vote}
+                    {#if vote.voter.name !== currentLogin}
+                      <button on:click={placeVote}>Vote</button>
+                    {/if}
+                  {/each}
+                  {:else}
+                  <button on:click={() => placeVote(poll.question, option.caption)}>Vote</button>
+                {/if}
+              </p>
+              {/each}
+            </div>
+
+          {/each}
+          {/await}
         {/if}
       {:else}
       <div class="create-user">
         <h2>Create new user or log in</h2>
         <label for="create-name">Name:</label>
-        <!-- The bind: syntax is used to establish two-way databinding with a variable -->
         <input  id="create-name" type="text" bind:value={newName}>
         <label for="create-email">Email:</label>
         <input  id="create-email" type="text" bind:value={newEmail}>
-        <!-- The on:click registers an event handler, i.e. a function to be called (Command pattern) -->
         <button on:click={createNewUser} >Create</button>
       </div>
     {/if}
-
-      </div>
+</div>

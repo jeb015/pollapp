@@ -69,10 +69,15 @@ public class PollController {
 
     @PostMapping("/createPoll")
     public ResponseEntity<Poll> addPoll(@RequestBody Poll poll) {
-        Poll newPoll = new Poll(poll.creator, poll.question, poll.options);
-        domainManager.getPolls().add(newPoll);
-        manager.getMap().put(poll.getCreator(), newPoll);
-        return ResponseEntity.created(URI.create("/" + newPoll.getCreator().name)).body(newPoll);
+            User creator = new User(poll.creator.name, poll.creator.email);
+            ArrayList<VoteOption> options = new ArrayList<>();
+            for (VoteOption option : poll.options) {
+                options.add(new VoteOption(option.caption));
+            }
+            Poll newPoll = new Poll(creator, poll.question, options);
+            domainManager.getPolls().add(newPoll);
+            manager.getMap().put(newPoll.getCreator(), newPoll);
+            return ResponseEntity.created(URI.create("/" + newPoll.getCreator().name)).body(newPoll);
     }
 
     @PutMapping("/vote")
@@ -94,7 +99,6 @@ public class PollController {
 
     @DeleteMapping("/delete")
     public String deletePoll(@RequestBody String question) {
-        System.out.println(question);
         for (Poll p : domainManager.getPolls()) {
             if (p.getQuestion().equals(question)) {
                 domainManager.getPolls().remove(p);
