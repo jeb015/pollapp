@@ -1,0 +1,21 @@
+meta {
+  name: deletePoll
+  type: http
+  seq: 10
+}
+
+delete {
+  url: http://127.0.0.1:8080/delete
+  body: text
+  auth: none
+}
+
+body:text {
+  sol eller måne?
+}
+
+tests {
+  test("create user", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

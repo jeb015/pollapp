@@ -1,0 +1,17 @@
+meta {
+  name: getPolls
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://127.0.0.1:8080/polls
+  body: none
+  auth: none
+}
+
+tests {
+  test("create user", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

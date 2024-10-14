@@ -1,0 +1,17 @@
+meta {
+  name: getUsers
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://127.0.0.1:8080/users
+  body: none
+  auth: none
+}
+
+tests {
+  test("create user", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

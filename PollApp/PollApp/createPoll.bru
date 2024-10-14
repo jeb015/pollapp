@@ -1,0 +1,40 @@
+meta {
+  name: createPoll
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://127.0.0.1:8080/createPoll
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "creator": {
+      "name": "ola",
+      "email": "ola@gmail.com"
+    },
+    "question": "sol eller måne?",
+    "validUntil": "2024-09-06T13:47:46.075846500Z",
+    "options": [
+      {
+        "caption": "sol",
+        "presentationOrder": 0,
+        "votes": []
+      },
+      {
+        "caption": "måne",
+        "presentationOrder": 1,
+        "votes": []
+      }
+    ]
+  }
+}
+
+tests {
+  test("create user", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

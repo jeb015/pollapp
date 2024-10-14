@@ -1,0 +1,24 @@
+meta {
+  name: createUser2
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://127.0.0.1:8080/createUser
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "lisa",
+    "email": "lisa@gmail.com"
+  }
+}
+
+tests {
+  test("create user", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

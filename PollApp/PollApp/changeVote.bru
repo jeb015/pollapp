@@ -1,0 +1,29 @@
+meta {
+  name: changeVote
+  type: http
+  seq: 8
+}
+
+put {
+  url: http://127.0.0.1:8080/vote
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "voter" : {
+        "name" : "lisa",
+        "email" : "lisa@gmail.com"
+      },
+      "question": "sol eller måne?",
+      "answer": "måne"
+    }
+  
+}
+
+tests {
+  test("create user", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
